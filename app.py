@@ -10,49 +10,24 @@ app = Flask(__name__)
 BASE_URL = "https://www.ebay.com/"
 
 EBAY_ITEM_PAGE_BASE = "https://www.ebay.com/itm/"
-ROOT_URL = "https://path/to/your/endpoint"
-session = requests.session()
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36"
-}
-
-proxies = {
-}
-
-@app.route('/')
-def index():
-    return "no data"
 
 @app.route('/<path:path>')
 def write_rss(path: str):  # put application's code here
-    path_url = request.url.replace(ROOT_URL, "")
+    path_url = request.url.replace(request.root_url, "")
     url = BASE_URL + path_url
-    try:
-         data = session.get(url, timeout=5, proxies=proxies)
-    except Exception as e: 
-        print(e)
-        abort(500)
+    data = requests.get(url)
 
-    print(url)
 
     if data.status_code != 200:
-        print(data.status_code)
         abort(404)
 
-    soup = BeautifulSoup(data.text)
+    soup = BeautifulSoup(data.text, "lxml")
 
-    title_string_container = soup.find("title")
-    if title_string_container is None:
-        title_string = "ebay_repeater"
-    else:
-        title_string = title_string_container.text
-    
     fg = FeedGenerator()
-    fg.id(ROOT_URL)
-    fg.title(title_string)
+    fg.id(request.root_url)
+    fg.title('eBay Router')
     fg.description("ebay Routing System")
-    fg.link(href=ROOT_URL)
+    fg.link(href=request.root_url)
     fg.author({'name': 'John Doe', 'email': 'john@example.de'})
     fg.language('en')
 
@@ -71,4 +46,4 @@ def write_rss(path: str):  # put application's code here
 
 
 if __name__ == '__main__':
-    app.run(port=31401)
+    app.run()

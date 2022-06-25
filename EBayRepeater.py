@@ -7,8 +7,6 @@ from feedgen.feed import FeedGenerator
 from typing import Optional
 from time import sleep
 
-#logging.basicConfig(level=logging.DEBUG)
-
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:68.0) Gecko/20100101 Firefox/68.0",
@@ -35,17 +33,11 @@ class EBayScrapers:
 
     @classmethod
     def photo(cls, list_container: BeautifulSoup):
-        new_list_html = str(list_container).replace('Results matching fewer words', '<li class="s-item">Results matching fewer words</li>')
-        items_soup = BeautifulSoup(new_list_html, "html.parser").find_all("li", class_="s-item")
+        items_soup = list_container.find_all("li", class_="s-item")
         if items_soup is None:
             logging.error("stopepd due to photo")
 
         for item_soup in items_soup:
-            if "Results matching fewer words" in item_soup.text:
-                logging.info("stopped due to ferwer")
-                print(item_soup.text)
-                break
-
             image_soup = item_soup.find("img", class_="s-item__image-img")
 
             ebay_dict = {
@@ -91,9 +83,8 @@ class EBayScrapers:
         items_soup = list_container.find_all("li", class_="lvresult")
         for item_soup in items_soup:
 
-            if "fewer words" in item_soup.text:
+            if "Results matching fewer words" in item_soup.text:
                 logging.info("stopped due to ferwer")
-                print(item_soup.text)
                 break
 
             image_container = item_soup.find("div", class_="lvpic")
@@ -151,7 +142,6 @@ class EBayScrapers:
     def select(cls, soup: BeautifulSoup) -> EBayEntry:
         list_soup = soup.find("ul", id="ListViewInner")
         if list_soup is not None:
-            #print(list_soup)
             for line in cls.normal(list_container=list_soup):
                 yield line
 
@@ -162,5 +152,4 @@ class EBayScrapers:
                     yield line
             else:
                 logging.error("no list")
-
 
