@@ -6,9 +6,7 @@ from feedgen.feed import FeedGenerator
 import re
 
 app = Flask(__name__)
-
 BASE_URL = "https://www.ebay.com/"
-
 EBAY_ITEM_PAGE_BASE = "https://www.ebay.com/itm/"
 
 @app.route('/<path:path>')
@@ -16,7 +14,6 @@ def write_rss(path: str):  # put application's code here
     path_url = request.url.replace(request.root_url, "")
     url = BASE_URL + path_url
     data = requests.get(url)
-
 
     if data.status_code != 200:
         abort(404)

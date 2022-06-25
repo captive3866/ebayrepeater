@@ -7,12 +7,10 @@ from feedgen.feed import FeedGenerator
 from typing import Optional
 from time import sleep
 
-
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:68.0) Gecko/20100101 Firefox/68.0",
     "Accept-Language": "en-US,en;q=0.5"
 }
-
 
 class EBayEntry:
     EBAY_URL_BASE = "https://www.ebay.com/itm/"
