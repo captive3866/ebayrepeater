@@ -9,6 +9,17 @@ app = Flask(__name__)
 BASE_URL = "https://www.ebay.com/"
 EBAY_ITEM_PAGE_BASE = "https://www.ebay.com/itm/"
 
+@app.route("/")
+def index():
+    return """
+App seems to be started
+Change eBay address like this:
+
+eBay Address: https://www.ebay.com/sch/i.html?_nkw=iPhone+SE
+-> RSS Address https://<this address>/sch/i.html?_nkw=iPhone+SE
+
+"""
+
 @app.route('/<path:path>')
 def write_rss(path: str):  # put application's code here
     path_url = request.url.replace(request.root_url, "")
