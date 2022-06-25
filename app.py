@@ -11,14 +11,16 @@ EBAY_ITEM_PAGE_BASE = "https://www.ebay.com/itm/"
 
 @app.route("/")
 def index():
-    return """
-App seems to be started
+    text = """eBayのRSSリピーターは動いている感じがします。
 Change eBay address like this:
+eBayのアドレスを例えば以下のように変更して、RSSリーダーに登録すると、RSSリーダーで取得できます。
 
 eBay Address: https://www.ebay.com/sch/i.html?_nkw=iPhone+SE
--> RSS Address https://<this address>/sch/i.html?_nkw=iPhone+SE
+-> RSS Address {0}sch/i.html?_nkw=iPhone+SE
 
-"""
+""".format(request.root_url)
+
+    return Response(text, headers={"Content-Type": "text/plain; charset=UTF-8"})
 
 @app.route('/<path:path>')
 def write_rss(path: str):  # put application's code here
