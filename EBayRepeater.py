@@ -12,6 +12,7 @@ headers = {
     "Accept-Language": "en-US,en;q=0.5"
 }
 
+
 class EBayEntry:
     EBAY_URL_BASE = "https://www.ebay.com/itm/"
 
@@ -47,13 +48,12 @@ class EBayScrapers:
 
             ebay_dict["image_url"] = image_soup["src"]
 
-            title_soup = item_soup.find("h3", class_="s-item__title")
+            title_soup = item_soup.find("div", class_="s-item__title")
             if title_soup is None:
                 logging.warning("no title skip")
                 continue
 
             ebay_dict["title"] = title_soup.text
-
 
             link_soup = item_soup.find("a")
             if link_soup is None or "href" not in link_soup.attrs:
